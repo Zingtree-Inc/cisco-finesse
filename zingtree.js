@@ -1,3 +1,9 @@
+
+/** Zingtree Configuration Details**/
+var DomainName = 'https://zingtree.com';
+var ApiKey = '';
+/** Zingtree Configuration Details**/
+
 var finesse = finesse || {};
 finesse.gadget = finesse.gadget || {};
 
@@ -8,53 +14,23 @@ finesse.modules.zingtree = (function ($) {
 	 
 	render = function () {
         var currentState = user.getState();
-
-        // Examples of getting data from the User object (GET)
-        //$("#userId").text(user.getId()); 
-		//$("#firstName").text(user.getFirstName());
-        //$("#lastName").text(user.getLastName());
-        //$("#extension").text(user.getExtension());
-        //$("#userState").text(currentState);		
         
     },
 	
 	handleNewDialog = function(dialog) {
         // call the displayCall handler
-        var callVars = dialog.getMediaProperties();
-		console.log("suresh:"+dialog.getMediaProperties().queueName);
-
-        // Examples of getting data from the Dialog object (GET)
-        //$("#dnis").text(dialog.getMediaProperties().DNIS);
-        //$("#callType").text(dialog.getMediaProperties().callType);
-        //$("#fromAddress").text(dialog.getFromAddress());
-        //$("#toAddress").text(JSON.stringify(dialog));
-        //$("#callState").text(dialog.getState());
+		var callVars = dialog.getMediaProperties();
+		// Getting Zingtree TreeID from Callflow
+		var Treeid = dialog.getMediaProperties().TreeID;       
 		
 		if(user.getExtension()!=dialog.getFromAddress())
 		{
-			$("#displayOut").text("");
-			//$("#contentPage").attr("src","https://agnocon.com/ZingTree/oncallnew/?callerid="+dialog.getFromAddress()+"&agentid="+user.getId()+"&appname=cisco&queuename="+dialog.ge//tMediaProperties().queueName);
+			$("#displayOut").text("");			
+			// Loading Zingtree url into iframe
+			$("#contentPage").attr("src", "" + DomainName +"/show/" + Treeid +"?agent_mode=1");
 			
-			
-			if(dialog.getMediaProperties().queueName=="Sales")
-			{
-				$("#contentPage").attr("src","https://zingtree.com/show/733233613?agent_mode=1&source=suresh@agnoshin.com");
-			}
-			else if(dialog.getMediaProperties().queueName=="Internet Troubleshooting")
-			{
-				$("#contentPage").attr("src","https://zingtree.com/show/526304251?agent_mode=1&source=suresh@agnoshin.com&zv_first_name="+dialog.getMediaProperties().callVariable2+"&zv_last_name="+dialog.getMediaProperties().callVariable3+"&zv_email="+dialog.getMediaProperties().callVariable4+"&zv_phone="+dialog.getMediaProperties().callVariable1+"&zv_city="+dialog.getMediaProperties().callVariable7+"&zv_zip="+dialog.getMediaProperties().callVariable9);
-			}
-			else if(dialog.getMediaProperties().queueName=="Medical Enrollment")
-			{
-				$("#contentPage").attr("src","https://zingtree.com/show/927688554?agent_mode=1&source=suresh@agnoshin.com");
-			}
-			else
-			{
-				$("#contentPage").attr("src","https://zingtree.com/show/348726885?agent_mode=1&source=suresh@agnoshin.com");
-			}
-			
-			$("#contentPage").attr("height","500");
-			//$("#displayOut").text(JSON.stringify(dialog.getMediaProperties()));
+			// Setting Zingtree page height
+			$("#contentPage").attr("height","500");			
 			gadgets.window.adjustHeight();
 		}
 		
